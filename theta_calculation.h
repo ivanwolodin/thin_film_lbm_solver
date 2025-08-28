@@ -37,20 +37,53 @@ inline void compute_height_and_radius() {
     center_y = jc;
 
     // --- 2. Минимальная толщина (подложка)
-    double thickness_min = thickness_max;
-    for (int i = 0; i < Nx; i++) {
-        for (int j = 0; j < Ny; j++) {
-            if (film_thickness[i][j] < thickness_min) {
-                thickness_min = film_thickness[i][j];
-            }
-        }
-    }
-
+    // double thickness_min = thickness_max;
+    // for (int i = 0; i < Nx; i++) {
+    //     for (int j = 0; j < Ny; j++) {
+    //         if (film_thickness[i][j] < thickness_min) {
+    //             thickness_min = film_thickness[i][j];
+    //         }
+    //     }
+    // }
+    //
     int r_left = 0, r_right = 0, r_up = 0, r_down = 0;
+    //
+    // // вправо
+    // for (int i = center_x; i < Nx - 1; i++) {
+    //     if (film_thickness[i][jc] <= thickness_min) {
+    //         r_right = i - center_x;
+    //         break;
+    //     }
+    // }
+    //
+    // // влево
+    // for (int i = center_x; i >= 0; i--) {
+    //     if (film_thickness[i][jc] <= thickness_min) {
+    //         r_left = center_x - i;
+    //         break;
+    //     }
+    // }
+    //
+    // // вниз (ось Y+)
+    // for (int j = center_y; j < Ny - 1; j++) {
+    //     if (film_thickness[center_x][j] <= thickness_min) {
+    //         r_down = j - center_y;
+    //         break;
+    //     }
+    // }
+    //
+    // // вверх (ось Y-)
+    // for (int j = center_y; j >= 0; j--) {
+    //     if (film_thickness[center_x][j] <= thickness_min) {
+    //         r_up = center_y - j;
+    //         break;
+    //     }
+    // }
+
 
     // вправо
     for (int i = center_x; i < Nx - 1; i++) {
-        if (film_thickness[i][jc] <= thickness_min) {
+        if (film_thickness[i][center_y] == minimal_thickness) {
             r_right = i - center_x;
             break;
         }
@@ -58,23 +91,23 @@ inline void compute_height_and_radius() {
 
     // влево
     for (int i = center_x; i >= 0; i--) {
-        if (film_thickness[i][jc] <= thickness_min) {
+        if (film_thickness[i][center_y] == minimal_thickness) {
             r_left = center_x - i;
             break;
         }
     }
 
-    // вниз (ось Y+)
+    // вверх
     for (int j = center_y; j < Ny - 1; j++) {
-        if (film_thickness[center_x][j] <= thickness_min) {
+        if (film_thickness[center_x][j] == minimal_thickness) {
             r_down = j - center_y;
             break;
         }
     }
 
-    // вверх (ось Y-)
+    // вниз
     for (int j = center_y; j >= 0; j--) {
-        if (film_thickness[center_x][j] <= thickness_min) {
+        if (film_thickness[center_x][j] == minimal_thickness) {
             r_up = center_y - j;
             break;
         }
@@ -83,7 +116,7 @@ inline void compute_height_and_radius() {
     spreading_radius = std::max({r_left, r_right, r_up, r_down});
     std::cout<<"spreading: " << spreading_radius<<std::endl;
     std::cout<<"thickness_max: " << thickness_max<<" at ("<<center_x<< ", " <<center_y <<")"<<std::endl;
-    std::cout<<"thickness_min: " << thickness_min<<std::endl;
+    // std::cout<<"thickness_min: " << thickness_min<<std::endl;
 
 }
 

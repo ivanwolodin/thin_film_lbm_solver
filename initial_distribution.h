@@ -40,10 +40,13 @@ inline void set_bubble() {
 }
 
 inline void set_droplet(
-    double radius=80
+
 ){
+    double radius=radius_initial;
     double x0 = Nx / 2.0;
     double y0 = Ny / 2.0;
+
+    bubble_volume = ((M_PI * radius * radius * radius) / 3.0) *  (1.0 - cos(theta_initial_d)) * (1.0 - cos(theta_initial_d)) * (2.0 + cos(theta_initial_d));
 
     for (int i = 0; i < Nx; ++i) {
         for (int j = 0; j < Ny; ++j) {
@@ -61,6 +64,19 @@ inline void set_droplet(
         }
     }
 }
+
+
+inline void set_flat(
+
+) {
+    for (int i = 0; i < Nx; ++i) {
+        for (int j = 0; j < Ny; ++j) {
+            film_thickness[i][j] = 1.0;
+        }
+    }
+}
+
+
 
 
 #endif //THIN_FILM_LBM_INITIAL_DISTRIBUTION_H

@@ -162,14 +162,14 @@ inline void output_fields(int step_time)
         output_field(step_time, "u");
         output_field(step_time, "v");
         output_field(step_time, "film_thickness");
-        output_field(step_time, "d_film_pressure");
-        output_field(step_time, "film_pressure");
-        output_field(step_time, "f_film_x");
-        output_field(step_time, "f_film_y");
-        output_field(step_time, "f_fric_x");
-        output_field(step_time, "f_fric_y");
-        output_field(step_time, "f_total_x");
-        output_field(step_time, "f_total_y");
+        // output_field(step_time, "d_film_pressure");
+        // output_field(step_time, "film_pressure");
+        // output_field(step_time, "f_film_x");
+        // output_field(step_time, "f_film_y");
+        // output_field(step_time, "f_fric_x");
+        // output_field(step_time, "f_fric_y");
+        // output_field(step_time, "f_total_x");
+        // output_field(step_time, "f_total_y");
 
         // output_field(step_time, "feq");
         // output_evolution();
@@ -207,5 +207,18 @@ inline void compute_thickness_integral(){
     cout<<"thickness: " <<thickness_integral<<endl;
 }
 
+inline void output_thickness_horizontal_slice(int step_time, int y)
+{
+    std::ofstream filestr;
+
+    std::string fileName = "res/horizontal_slice_thickness_" + std::to_string(y) + '_' + std::to_string(step_time) + ".txt";
+
+    filestr.open(fileName);
+    for (int x = 0; x <= Nx - 1; x++)
+    {
+        filestr << film_thickness[x][y] << endl;
+    }
+    filestr.close();
+}
 
 #endif //THIN_FILM_LBM_OUTPUT_H

@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "controlling_params.h"
 #include "diff_operators.h"
+#include "theta_calculation.h"
 
 inline void compute_hydrostatic_pressure(){
     for (int i = 0; i <= Nx - 1; i++){
@@ -42,7 +43,8 @@ inline void compute_film_fric(){
 
 inline void compute_pii(){
     theta_current = theta_initial_d;
-    double pii_theta = (1.0 - cos(theta_current)) * (((n - 1) * (m - 1)) / (n - m));
+    // compute_theta();
+    double pii_theta = (1.0 - cos(theta_current)) * (((n - 1.0) * (m - 1.0)) / (n - m));
     for (int i = 0; i <= Nx - 1; i++){
         for (int j = 0; j <= Ny - 1; j++){
             film_thickness_previous[i][j] = minimal_thickness;
@@ -86,19 +88,19 @@ inline void compute_pressure_film_2() {
     for (int i = 0; i < Nx; i++) {
         for (int j = 0; j < Ny; j++) {
             // film_pressure = -σ * (pii + laplacian(h))
-            film_pressure[i][j] = -surface_tension * (pii[i][j] + 1*laplacian_film_thickness[i][j]);
+            film_pressure[i][j] = -surface_tension * (pii[i][j] + laplacian_film_thickness[i][j]);
         }
     }
 }
 
 inline void compute_pressure_film(){
     compute_pii();
-    // compute_laplacian(laplacian_film_thickness, film_thickness);
-    compute_laplacian_classic(laplacian_film_thickness, film_thickness);
+    compute_laplacian(laplacian_film_thickness, film_thickness);
+    // compute_laplacian_classic(laplacian_film_thickness, film_thickness);
 
     for (int i = 0; i <= Nx - 1; i++){
         for (int j = 0; j <= Ny - 1; j++){
-            film_pressure[i][j] = -surface_tension * (laplacian_film_thickness[i][j] - pii[i][j]);
+            film_pressure[i][j] = -surface_tension * (laplacian_film_thickness[i][j] + pii[i][j]);
         }
     }
 }
@@ -126,7 +128,7 @@ inline void compute_film_force_2(){
 }
 
 inline void compute_all_forces(){
-    compute_film_force_2();
+    compute_film_force();
     compute_film_fric();
     compute_total_force();
 }

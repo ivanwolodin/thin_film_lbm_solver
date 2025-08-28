@@ -150,23 +150,15 @@ inline void collision_step_2() {
 }
 
 inline void take_step() {
-    compute_feq_2();
     compute_all_forces();
-
     // compute_feq();
-
-    // compute_feq_2();
-    collision_step_2();
+    compute_feq_2();
+    collision_step();
     streaming_step();
     boundary_conditions();
-    // save_previous_film();
     compute_macroscopic_values();
-
-    // compute_theta();
-
     compute_thickness_integral();
     compute_max_height();
-
 }
 
 #endif //THIN_FILM_LBM_KERNEL_H
