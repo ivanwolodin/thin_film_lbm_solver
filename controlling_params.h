@@ -4,14 +4,14 @@
 #include <cmath>
 
 constexpr double rho_0 = 1.0;
-constexpr double tau = 0.923;
+inline double tau = 0.923;
 
-constexpr double surface_tension = 0.00005; // surface tension
+inline double surface_tension = 0.00005; // surface tension
 inline double delta = 1.0;                  // eﬀective slip length
 
 inline double bubble_volume;
 
-const double gravity = 1.0 * pow(10, -5);
+inline double gravity = 1.0 * pow(10, -5);
 
 inline double radius_initial = 80.0;
 
@@ -33,6 +33,8 @@ inline double theta_current = theta_initial_d;
 inline double spreading_radius;
 
 inline double radius_current;
+
+inline int steps_number;
 
 // Lennard-Johnson
 constexpr int n = 9;

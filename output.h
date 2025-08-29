@@ -12,7 +12,7 @@
 inline void greetings() {
     std::cout<<"================================================="<<std::endl;
     std::cout<<"================================================="<<std::endl;
-    std::cout<<"LATTICE BOLTZMANN SOLVER for thin films"<<std::endl;
+    std::cout<<"====LATTICE BOLTZMANN SOLVER for thin films======"<<std::endl;
     std::cout<<"================================================="<<std::endl;
     std::cout<<"================================================="<<std::endl;
 }
@@ -48,7 +48,7 @@ inline void dump_initial_params() {
     if (filestr.is_open()) std::cout << "The file has not been closed!" << std::endl;
 }
 
-inline void output_field(int step_time, std::string which_field)
+inline void output_field(int step_time, const std::string& which_field)
 {
     std::ofstream filestr;
 

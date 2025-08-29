@@ -7,7 +7,7 @@
 #include "constants.h"
 #include "controlling_params.h"
 
-inline void compute_max_height() {
+inline void compute_total_mass() {
     thickness_max = 0.0;
     for (int i = 0; i < Nx; i++) {
         for (int j = 0; j < Ny; j++) {

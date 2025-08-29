@@ -35,7 +35,7 @@ constexpr double dy = 1.0;
 constexpr double dt = 1.0;
 
 constexpr double sound_speed_squared = (1.0 / 3.0) * ((dx * dx) / dt);
-constexpr double viscosity = (tau - 0.5) * sound_speed_squared;
+inline double viscosity = (tau - 0.5) * sound_speed_squared;
 
 inline vector<vector<vector<double>>> f(Nx, vector<vector<double>>(Ny, vector<double>(Nc)));
 inline vector<vector<vector<double>>> feq(Nx, vector<vector<double>>(Ny, vector<double>(Nc)));
