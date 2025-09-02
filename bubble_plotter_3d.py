@@ -2,9 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Параметры
-step = 200000
+step = 1000
 filename = f"res/film_thickness_{step}.txt"
-N = 300  # размер сетки (должен совпадать с тем, что в C++ коде)
+N = 200  # размер сетки (должен совпадать с тем, что в C++ коде)
 L = N  # физический размер области
 
 # Считываем данные
@@ -34,5 +34,5 @@ ax.set_ylabel("Y")
 ax.set_zlabel("Thickness")
 # plt.show()
 
-plt.savefig(f'figs/{step}_bubble_3d.png')
+plt.savefig(f'{step}_bubble_3d.png')
 plt.close()

@@ -45,6 +45,7 @@ inline void compute_pii(){
     theta_current = theta_initial_d;
     // compute_theta();
     double pii_theta = (1.0 - cos(theta_current)) * (((n - 1.0) * (m - 1.0)) / (n - m));
+    // cout << "pii_theta = " << pii_theta << endl;
     for (int i = 0; i <= Nx - 1; i++){
         for (int j = 0; j <= Ny - 1; j++){
             film_thickness_previous[i][j] = minimal_thickness;
@@ -95,8 +96,8 @@ inline void compute_pressure_film_2() {
 
 inline void compute_pressure_film(){
     compute_pii();
-    compute_laplacian(laplacian_film_thickness, film_thickness);
-    // compute_laplacian_classic(laplacian_film_thickness, film_thickness);
+    // compute_laplacian(laplacian_film_thickness, film_thickness);
+    compute_laplacian_classic(laplacian_film_thickness, film_thickness);
 
     for (int i = 0; i <= Nx - 1; i++){
         for (int j = 0; j <= Ny - 1; j++){

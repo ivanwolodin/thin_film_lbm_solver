@@ -36,6 +36,8 @@ inline double radius_current;
 
 inline int steps_number;
 
+inline double thickness_integral = 0.0;
+
 // Lennard-Johnson
 constexpr int n = 9;
 constexpr int m = 3;

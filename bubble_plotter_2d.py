@@ -1,10 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-step = 10000
-filename = f"res/film_thickness_{step}.txt"
+step = 1000
+field = 'film_thickness'
+#
+# field = 'u'
+# field = 'v'
+
+filename = f"res/{field}_{step}.txt"
 # filename = f"bubble_height.txt"
-N = 300  # размер сетки (должен совпадать с тем, что в C++ коде)
+N = 200  # размер сетки (должен совпадать с тем, что в C++ коде)
 L = N  # физический размер области
 
 # Считываем данные
@@ -29,10 +34,10 @@ plt.figure(figsize=(6, 5))
 plt.imshow(film_thickness.T, origin='lower',
            extent=[x.min(), x.max(), y.min(), y.max()],
            cmap='viridis', interpolation='nearest')
-plt.colorbar(label="Thickness")
+plt.colorbar(label=f"{field}")
 plt.xlabel("X")
 plt.ylabel("Y")
-plt.title("Half Drop Thickness Map")
+plt.title(f"{field}_{step}")
 
-plt.savefig(f'{step}_bubble_2d.png')
+plt.savefig(f'{step}_{field}_2d.png')
 plt.close()

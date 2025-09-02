@@ -159,7 +159,7 @@ inline void take_step() {
     compute_macroscopic_values();
     compute_thickness_integral();
 
-    compute_total_mass();
+    compute_max_height();
 }
 
 #endif //THIN_FILM_LBM_KERNEL_H

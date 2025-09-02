@@ -27,6 +27,8 @@ inline void dump_initial_params() {
     filestr<<"Nx= "<< Nx << std::endl;
     filestr<<"Ny= "<< Ny << std::endl;
 
+    filestr<<"gravity= "<< gravity << std::endl;
+
     filestr<<"tau= "<< tau << std::endl;
     filestr<<"viscosity= "<< viscosity << std::endl;
 
@@ -136,28 +138,9 @@ inline void output_field(int step_time, const std::string& which_field)
 
 inline void output_fields(int step_time)
 {
-    // if ((step_time < 15000   && step_time % 1000   == 0) ||
-    //     (step_time < 100000  && step_time % 10000  == 0) ||
-    //     (step_time >= 100000 && step_time % 100000 == 0) )
-    // {
-    //     // output_field(step_time, "u");
-    //     // output_field(step_time, "v");
-    //     output_field(step_time, "film_thickness");
-    //     // output_field(step_time, "d_film_pressure");
-    //     // output_field(step_time, "film_pressure");
-    //     // output_field(step_time, "f_film_x");
-    //     // output_field(step_time, "f_film_y");
-    //     // output_field(step_time, "f_fric_x");
-    //     // output_field(step_time, "f_fric_y");
-    //     // output_field(step_time, "f_total_x");
-    //     // output_field(step_time, "f_total_y");
-
-    //     // output_field(step_time, "feq");
-    //     // output_evolution();
-    // }
-
-
-    if (step_time % 1000 == 0)
+    if ((step_time < 15000   && step_time % 1000   == 0) ||
+        (step_time < 100000  && step_time % 10000  == 0) ||
+        (step_time >= 100000 && step_time % 100000 == 0) )
     {
         output_field(step_time, "u");
         output_field(step_time, "v");
@@ -174,6 +157,41 @@ inline void output_fields(int step_time)
         // output_field(step_time, "feq");
         // output_evolution();
     }
+
+
+    // if (step_time % 20000 == 0)
+    // {
+    //     output_field(step_time, "u");
+    //     output_field(step_time, "v");
+    //     output_field(step_time, "film_thickness");
+    //     // output_field(step_time, "d_film_pressure");
+    //     // output_field(step_time, "film_pressure");
+    //     // output_field(step_time, "f_film_x");
+    //     // output_field(step_time, "f_film_y");
+    //     // output_field(step_time, "f_fric_x");
+    //     // output_field(step_time, "f_fric_y");
+    //     // output_field(step_time, "f_total_x");
+    //     // output_field(step_time, "f_total_y");
+    //
+    //     // output_field(step_time, "feq");
+    //     // output_evolution();
+    // }
+}
+
+inline void output_max_height(int step_time) {
+    std::ofstream height_f;
+    std::string fileheight = "height.txt";
+
+    height_f.open(fileheight, std::ios::app);
+    height_f << step_time << "  " << thickness_max << endl;
+}
+
+inline void output_total_mass(int step_time) {
+    std::ofstream height_f;
+    std::string fileheight = "mass.txt";
+
+    height_f.open(fileheight, std::ios::app);
+    height_f << step_time << "  " << thickness_integral << endl;
 }
 
 inline void output_radius_and_h_and_theta(int step_time)
@@ -190,15 +208,11 @@ inline void output_radius_and_h_and_theta(int step_time)
     radius_f.open(fileNameMeanRho, std::ios::app);
     radius_f << step_time << "  " << spreading_radius << endl;
 
-    std::ofstream height_f;
-    std::string fileheight = "height.txt";
-
-    height_f.open(fileheight, std::ios::app);
-    height_f << step_time << "  " << thickness_max << endl;
+    output_max_height(step_time);
 }
 
 inline void compute_thickness_integral(){
-    double thickness_integral = 0.0;
+    thickness_integral = 0.0;
     for (int i = 0; i <= Nx - 1; i++){
         for (int j = 0; j <= Ny - 1; j++){
             thickness_integral += film_thickness[i][j];
