@@ -160,6 +160,9 @@ inline void take_step() {
     compute_thickness_integral();
 
     compute_max_height();
+    compute_u_total();
+    compute_v_total();
+
 }
 
 #endif //THIN_FILM_LBM_KERNEL_H

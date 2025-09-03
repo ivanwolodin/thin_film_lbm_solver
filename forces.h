@@ -17,8 +17,8 @@ inline void compute_hydrostatic_pressure(){
 inline void compute_total_force(){
     for (int i = 0; i <= Nx - 1; i++){
         for (int j = 0; j <= Ny - 1; j++){
-            f_total[i][j][0] = f_film[i][j][0] + f_fric[i][j][0] + gravity * 0.0;
-            f_total[i][j][1] = f_film[i][j][1] + f_fric[i][j][1] - gravity * 1.0;
+            f_total[i][j][0] = f_film[i][j][0] + f_fric[i][j][0] + 0*gravity * 1.0 * sin (30 * (M_PI / 180));
+            f_total[i][j][1] = f_film[i][j][1] + f_fric[i][j][1] - gravity * 1.0;// * cos (90 * (M_PI / 180));
         }
     }
 }
@@ -108,7 +108,8 @@ inline void compute_pressure_film(){
 
 inline void compute_film_force(){
     compute_pressure_film();
-    compute_grad(d_film_pressure, film_pressure);
+    // compute_grad(d_film_pressure, film_pressure);
+    compute_grad_classic(d_film_pressure, film_pressure);
     for (int i = 0; i <= Nx - 1; i++){
         for (int j = 0; j <= Ny - 1; j++){
             f_film[i][j][0] = -(1.0 / rho_0) * film_thickness[i][j] * d_film_pressure[i][j][0];

@@ -19,6 +19,27 @@ inline void compute_max_height() {
     cout<<"thickness_max: " <<thickness_max<<endl;
 }
 
+inline void compute_u_total() {
+    double u_total = 0.0;
+    for (int i = 0; i < Nx; i++) {
+        for (int j = 0; j < Ny; j++) {
+            u_total += u[i][j][0];
+        }
+    }
+    cout<<"u_total: " <<u_total<<endl;
+}
+
+inline void compute_v_total() {
+    double v_total = 0.0;
+    for (int i = 0; i < Nx; i++) {
+        for (int j = 0; j < Ny; j++) {
+            v_total += u[i][j][1];
+        }
+    }
+    cout<<"v_total: " <<v_total<<endl;
+}
+
+
 inline void compute_height_and_radius() {
     // --- 1. Максимальная высота и её координаты
     int jc = 0, ic = 0;

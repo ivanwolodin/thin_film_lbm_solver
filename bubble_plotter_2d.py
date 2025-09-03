@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 
 step = 1000
 field = 'film_thickness'
-#
-# field = 'u'
-# field = 'v'
 
 filename = f"res/{field}_{step}.txt"
 # filename = f"bubble_height.txt"
-N = 200  # размер сетки (должен совпадать с тем, что в C++ коде)
-L = N  # физический размер области
+
+Nx = 300  # число узлов по X
+Ny = 200  # число узлов по Y
+Lx = Nx   # физический размер области по X
+Ly = Ny   # физический размер области по Y
 
 # Считываем данные
 data = np.loadtxt(filename)
@@ -19,20 +19,21 @@ j_vals = data[:, 1].astype(int)
 h_vals = data[:, 2]
 
 # Формируем массив толщины
-film_thickness = np.zeros((N, N))
+film_thickness = np.zeros((Nx, Ny))
 for k in range(len(h_vals)):
     i = i_vals[k]
     j = j_vals[k]
     film_thickness[i, j] = h_vals[k]
 
 # Создаем координатные сетки
-x = np.linspace(0, L, N)
-y = np.linspace(0, L, N)
+x = np.linspace(0, Lx, Nx)
+y = np.linspace(0, Ly, Ny)
 
 # 2D визуализация с цветом
 plt.figure(figsize=(6, 5))
 plt.imshow(film_thickness.T, origin='lower',
            extent=[x.min(), x.max(), y.min(), y.max()],
+           aspect=Lx/Ly,  # чтобы не искажало пропорции
            cmap='viridis', interpolation='nearest')
 plt.colorbar(label=f"{field}")
 plt.xlabel("X")

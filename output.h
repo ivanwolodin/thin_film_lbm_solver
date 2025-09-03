@@ -218,7 +218,7 @@ inline void compute_thickness_integral(){
             thickness_integral += film_thickness[i][j];
         }
     }
-    cout<<"thickness: " <<thickness_integral<<endl;
+    cout<<"mass: " <<thickness_integral<<endl;
 }
 
 inline void output_thickness_horizontal_slice(int step_time, int y)

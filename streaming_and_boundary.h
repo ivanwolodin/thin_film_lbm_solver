@@ -57,7 +57,7 @@ inline void streaming_step() {
 
 inline void boundary_conditions(){
     // right periodic
-    for (int j = 1; j < Ny - 1; j++)
+    for (int j = 0; j <= Ny - 1; j++)
     {
         f[Nx - 1][j][6] = f[0][j][6];
         f[Nx - 1][j][3] = f[0][j][3];
@@ -65,15 +65,29 @@ inline void boundary_conditions(){
     }
 
     // left periodic
-    for (int j = 1; j < Ny - 1; j++)
+    for (int j = 0; j <= Ny - 1; j++)
     {
         f[0][j][8] = f[Nx - 1][j][8];
         f[0][j][1] = f[Nx - 1][j][1];
         f[0][j][5] = f[Nx - 1][j][5];
     }
 
+    // // right no-slip
+    // for (int j = 0; j <= Ny - 1; j++) {
+    //     f[Nx - 1][j][6] = f[Nx - 1][j][8];
+    //     f[Nx - 1][j][3] = f[Nx - 1][j][1];
+    //     f[Nx - 1][j][7] = f[Nx - 1][j][5];
+    // }
+    //
+    // // left no-slip
+    // for (int j = 0; j <= Ny - 1; j++) {
+    //     f[0][j][8] = f[0][j][6];
+    //     f[0][j][1] = f[0][j][3];
+    //     f[0][j][5] = f[0][j][7];
+    // }
+
     //  bottom periodic
-    for (int i = 0; i <= Nx - 1; i++)
+    for (int i = 1; i < Nx - 1; i++)
     {
         f[i][0][2] = f[i][Ny - 1][2];
         f[i][0][6] = f[i][Ny - 1][6];
@@ -81,7 +95,7 @@ inline void boundary_conditions(){
     }
 
     // upper periodic
-    for (int i = 0; i <= Nx - 1; i++)
+    for (int i = 1; i < Nx - 1; i++)
     {
         f[i][Ny - 1][4] = f[i][0][4];
         f[i][Ny - 1][7] = f[i][0][7];
