@@ -15,6 +15,15 @@ inline void compute_grad_classic(
             grad_func[i][j][1] = dfdy;
         }
     }
+
+    // for (int j = 1; j < Ny - 1; j++) {
+    //     grad_func[0][j][0] = func[0][j] - func[1][j];
+    //     grad_func[0][j][1] = func[0][j] - func[0][j - 1];
+    //
+    //     grad_func[Nx - 1][j][0] = func[Nx - 1][j] - func[Nx - 2][j];
+    //     grad_func[Nx - 1][j][1] = func[Nx - 1][j] - func[Nx - 1][j - 1];
+    // }
+
 }
 
 
@@ -126,6 +135,26 @@ inline void compute_laplacian_classic(
             );
         }
     }
+
+    // // Левая стенка i = 0
+    // for (int j = 1; j < Ny - 1; ++j) {
+    //     laplacian_func[0][j] = coef * (
+    //         (func[1][j] - func[0][j]) +
+    //         (func[0][j + 1] - func[0][j]) +
+    //         (func[0][j - 1] - func[0][j])
+    //     );
+    // }
+    //
+    // // Правая стенка i = Nx - 1
+    // for (int j = 1; j < Ny - 1; ++j) {
+    //     laplacian_func[Nx - 1][j] = coef * (
+    //         (func[Nx - 2][j] - func[Nx - 1][j]) +
+    //         (func[Nx - 1][j+1] - func[Nx - 1][j]) +
+    //         (func[Nx - 1][j-1] - func[Nx - 1][j])
+    //     );
+    // }
+
+
     // // граница i=0
     // for (int j = 0; j < Ny; ++j) {
     //     int ip = (0 + 1) % Nx;

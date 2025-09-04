@@ -149,20 +149,25 @@ inline void collision_step_2() {
     }
 }
 
+inline void healthy_check() {
+    compute_thickness_integral();
+    compute_max_height();
+    compute_min_height();
+    cout<< "dh = " << thickness_max - thickness_min << endl;
+    compute_u_total();
+    compute_v_total();
+
+    compute_energy();
+}
+
 inline void take_step() {
-    compute_all_forces();
-    // compute_feq();
     compute_feq_2();
     collision_step();
     streaming_step();
     boundary_conditions();
     compute_macroscopic_values();
-    compute_thickness_integral();
-
-    compute_max_height();
-    compute_u_total();
-    compute_v_total();
-
+    compute_all_forces();
+    healthy_check();
 }
 
 #endif //THIN_FILM_LBM_KERNEL_H

@@ -7,8 +7,8 @@ field = 'film_thickness'
 filename = f"res/{field}_{step}.txt"
 # filename = f"bubble_height.txt"
 
-Nx = 300  # число узлов по X
-Ny = 200  # число узлов по Y
+Nx = 100  # число узлов по X
+Ny = 100  # число узлов по Y
 Lx = Nx   # физический размер области по X
 Ly = Ny   # физический размер области по Y
 

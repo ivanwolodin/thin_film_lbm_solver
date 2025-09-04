@@ -19,6 +19,19 @@ inline void compute_max_height() {
     cout<<"thickness_max: " <<thickness_max<<endl;
 }
 
+inline void compute_min_height() {
+    thickness_min = 10.0;
+    for (int i = 0; i < Nx; i++) {
+        for (int j = 0; j < Ny; j++) {
+            if (film_thickness[i][j] < thickness_min) {
+                thickness_min = film_thickness[i][j];
+            }
+        }
+    }
+    cout << "thickness_min: " << thickness_min << endl;
+}
+
+
 inline void compute_u_total() {
     double u_total = 0.0;
     for (int i = 0; i < Nx; i++) {
@@ -38,6 +51,25 @@ inline void compute_v_total() {
     }
     cout<<"v_total: " <<v_total<<endl;
 }
+
+inline void compute_energy() {
+    total_energy = 0.0;
+    for (int i = 0; i < Nx; i++) {
+        for (int j = 0; j < Ny; j++) {
+            total_energy += film_thickness[i][j];
+        }
+    }
+    total_energy *= gravity;
+    double velocity_modulus = 0.0;
+
+    for (int i = 0; i < Nx; i++) {
+        for (int j = 0; j < Ny; j++) {
+            velocity_modulus += (u[i][j][0] * u[i][j][0] + u[i][j][1] * u[i][j][1]);
+        }
+    }
+    total_energy += (0.5 * velocity_modulus);
+}
+
 
 
 inline void compute_height_and_radius() {

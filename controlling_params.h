@@ -22,8 +22,11 @@ inline double theta_equilibrium = 15.0;
 inline double theta_equilibrium_d = theta_equilibrium * (M_PI / 180);
 
 inline double thickness_max = 0.0;
+inline double thickness_min = 10.0;
 
-inline double minimal_thickness = 0.05;
+inline double total_energy = 0.0;
+
+inline double minimal_thickness = 0.07;
 
 inline int center_x = 0;
 inline int center_y = 0;

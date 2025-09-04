@@ -180,11 +180,36 @@ inline void output_fields(int step_time)
 
 inline void output_max_height(int step_time) {
     std::ofstream height_f;
-    std::string fileheight = "height.txt";
+    std::string fileheight = "h_max.txt";
 
     height_f.open(fileheight, std::ios::app);
     height_f << step_time << "  " << thickness_max << endl;
 }
+
+inline void output_min_height(int step_time) {
+    std::ofstream height_f;
+    std::string fileheight = "h_min.txt";
+
+    height_f.open(fileheight, std::ios::app);
+    height_f << step_time << "  " << thickness_min << endl;
+}
+
+inline void output_dh(int step_time) {
+    std::ofstream height_f;
+    std::string fileheight = "dh.txt";
+
+    height_f.open(fileheight, std::ios::app);
+    height_f << step_time << "  " << thickness_max - thickness_min << endl;
+}
+
+inline void output_energy(int step_time) {
+    std::ofstream height_f;
+    std::string fileheight = "E.txt";
+
+    height_f.open(fileheight, std::ios::app);
+    height_f << step_time << "  " << total_energy << endl;
+}
+
 
 inline void output_total_mass(int step_time) {
     std::ofstream height_f;
