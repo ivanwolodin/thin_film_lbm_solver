@@ -580,31 +580,6 @@ void simulate_square_drop() {
     Fx = 0*gravity * sin(inclination_angle * (M_PI / 180));
     Fy = -0*gravity * cos(inclination_angle * (M_PI / 180));
 
-    double h0 = 1.0;
-
-    // for (size_t i = 0; i <= Nx - 1; i++) {
-    //     for (size_t j = 0; j <= Ny - 1; j++) {
-    //         film_thickness[i][j] = 0.05;
-    //     }
-    // }
-    //
-    // double height = 10.0;    // заданная высота
-    // size_t area = 2500;       // площадь в ячейках (например 5x5)
-    //
-    // size_t side = static_cast<size_t>(std::sqrt(area));
-    // if (side * side < area) side++; // чтобы гарантировать площадь ≥ заданной
-    //
-    // size_t cxx = Nx / 2;
-    // size_t cyy = Ny / 2;
-    //
-    // size_t half = side / 2;
-    //
-    // for (size_t i = cxx - half; i <= cxx + half && i < Nx; i++) {
-    //     for (size_t j = cyy - half; j <= cyy + half && j < Ny; j++) {
-    //         film_thickness[i][j] = height;
-    //     }
-    // }
-
     output_fields(0);
     compute_feq_2();
     for (int i = 0; i <= Nx - 1; i++){
@@ -695,6 +670,83 @@ inline void simulate_sliding_square_drop() {
 
 
 
+inline void simulate_bubble_different_theta() {
+
+    tau = 0.923;
+    viscosity = (tau - 0.5) * sound_speed_squared;
+
+    delta = 1.0;
+    surface_tension = 0.00005;
+    gravity = 1.0 * pow(10, -5);
+    theta_initial = 90.0;
+    theta_initial_d = theta_initial * (M_PI / 180);
+    theta_current = theta_initial_d;
+    minimal_thickness = 0.05;
+
+    steps_number = 5000000;
+
+    Fx = 0;
+    Fy = 0;
+
+    for (size_t i = 0; i <= Nx - 1; i++) {
+        for (size_t j = 0; j <= Ny - 1; j++) {
+            film_thickness[i][j] = 0.05;
+        }
+    }
+
+    double height = 10.0;    // заданная высота
+    area = 400;              // площадь в ячейках (например 5x5)
+
+    size_t side = static_cast<size_t>(std::sqrt(area));
+    if (side * side < area) side++; // чтобы гарантировать площадь ≥ заданной
+
+    size_t cxx = Nx / 2;
+    size_t cyy = Ny / 2;
+
+    size_t half = side / 2;
+
+    for (size_t i = cxx - half; i <= cxx + half && i < Nx; i++) {
+        for (size_t j = cyy - half; j <= cyy + half && j < Ny; j++) {
+            film_thickness[i][j] = height;
+        }
+    }
+
+    modulated_gravity = gravity;
+    output_fields(0);
+    compute_feq_2();
+    for (int i = 0; i <= Nx - 1; i++){
+        for (int j = 0; j <= Ny - 1; j++){
+            for (int k = 0; k < Nc; k++){
+                f[i][j][k] = feq[i][j][k];
+            }
+
+        }
+    }
+
+    amplitude = 0*30;//14.14213;
+    omega     = 0.05;
+
+    dump_initial_params();
+    // compute_all_forces();
+
+    for (int step = 1; step <= steps_number; step++) {
+        std::cout<<"============================"<<std::endl;
+        std::cout << "step = " << step << std::endl;
+
+        // double t = step * delta_t;
+        modulated_gravity = gravity *  (1.0 + amplitude * amplitude * omega * sin(omega * step));
+
+        take_step();
+        output_fields(step);
+        output_max_height(step);
+        output_min_height(step);
+        output_total_mass(step);
+        output_dh(step);
+        output_energy(step);
+    }
+}
+
+
 int main() {
     greetings();
     // simulate_falling_film();
@@ -707,6 +759,10 @@ int main() {
     // simulate_square_drop();
 
     // simulate_bubble();
-    simulate_bubble_vibro();
+    // simulate_bubble_vibro();
+
+    simulate_bubble_different_theta();
+
     return 0;
+
 }
