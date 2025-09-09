@@ -168,6 +168,8 @@ inline void take_step() {
     compute_macroscopic_values();
     compute_all_forces();
     healthy_check();
+
+    compute_avg_velocity();
 }
 
 #endif //THIN_FILM_LBM_KERNEL_H

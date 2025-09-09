@@ -41,6 +41,10 @@ inline int steps_number;
 
 inline double thickness_integral = 0.0;
 
+inline double Fx = -1000;
+inline double Fy = -1000;
+
+
 // Lennard-Johnson
 constexpr int n = 9;
 constexpr int m = 3;

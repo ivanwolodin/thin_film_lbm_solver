@@ -28,6 +28,8 @@ inline void dump_initial_params() {
     filestr<<"Ny= "<< Ny << std::endl;
 
     filestr<<"gravity= "<< gravity << std::endl;
+    filestr<<"Fx= "<< Fx << std::endl;
+    filestr<<"Fy= "<< Fy << std::endl;
 
     filestr<<"tau= "<< tau << std::endl;
     filestr<<"viscosity= "<< viscosity << std::endl;
@@ -57,6 +59,20 @@ inline void output_field(int step_time, const std::string& which_field)
     std::string fileName = "res/" + which_field + "_" + std::to_string(step_time) + ".txt";
 
     filestr.open(fileName);
+
+    if (which_field == "ux_profile")
+    {
+        for (int k = 0; k < Nz; k++) {
+            filestr << k << " " << ux_profile[k] << std::endl;
+        }
+    }
+
+    if (which_field == "uy_profile")
+    {
+        for (int k = 0; k < Nz; k++) {
+            filestr << k << " " << uy_profile[k] << std::endl;
+        }
+    }
 
     for (int x = 0; x <= Nx - 1; x++)
     {
@@ -144,6 +160,10 @@ inline void output_fields(int step_time)
     {
         output_field(step_time, "u");
         output_field(step_time, "v");
+
+        output_field(step_time, "ux_profile");
+        output_field(step_time, "uy_profile");
+
         output_field(step_time, "film_thickness");
         // output_field(step_time, "d_film_pressure");
         // output_field(step_time, "film_pressure");

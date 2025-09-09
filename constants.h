@@ -15,6 +15,8 @@ constexpr int Nx = 200;
 constexpr int Ny = 200;
 constexpr int Nc = 9;
 
+constexpr int Nz = 20;
+
 constexpr int cx[9] = {0, 1, 0, -1, 0, 1, -1, -1, 1};
 constexpr int cy[9] = {0, 0, 1, 0, -1, 1, 1, -1, -1};
 
@@ -59,5 +61,7 @@ inline vector<vector<vector<double>>> f_total(Nx, vector<vector<double>>(Ny, vec
 inline vector<vector<vector<double>>> f_film(Nx, vector<vector<double>>(Ny, vector<double>(Nc)));
 inline vector<vector<vector<double>>> f_fric(Nx, vector<vector<double>>(Ny, vector<double>(Nc)));
 
+inline std::vector<double> ux_profile(Nz);
+inline std::vector<double> uy_profile(Nz);
 
 #endif //THIN_FILM_LBM_CONSTANTS_H

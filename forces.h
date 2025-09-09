@@ -17,8 +17,8 @@ inline void compute_hydrostatic_pressure(){
 inline void compute_total_force(){
     for (int i = 0; i <= Nx - 1; i++){
         for (int j = 0; j <= Ny - 1; j++){
-            f_total[i][j][0] = f_film[i][j][0] + f_fric[i][j][0];
-            f_total[i][j][1] = f_film[i][j][1] + f_fric[i][j][1];
+            f_total[i][j][0] = f_film[i][j][0] + f_fric[i][j][0] + Fx;
+            f_total[i][j][1] = f_film[i][j][1] + f_fric[i][j][1] + Fy;
         }
     }
 }
@@ -128,6 +128,62 @@ inline void compute_film_force_2(){
             f_film[i][j][0] = -(1.0 / rho_0) * film_thickness[i][j] * d_film_pressure[i][j][0];
             f_film[i][j][1] = -(1.0 / rho_0) * film_thickness[i][j] * d_film_pressure[i][j][1];
         }
+    }
+}
+
+inline void compute_avg_velocity(){
+
+    int j_center = Ny / 2;
+    double sum_ux;
+    double h;
+    double dpdx;
+    double z;
+    double ux;
+    double avg_ux;
+
+    for (int k = 0; k <= Nz; k++) {
+        sum_ux = 0.0;
+
+        for (int i = 0; i <= Nx - 1; i++) {
+            h = film_thickness[i][j_center];
+            dpdx = d_film_pressure[i][j_center][0];
+
+            if (h <= 0.0) continue;
+
+            z = (double)k / Nz * h;
+            ux = (1.0 / (2.0 * viscosity)) * dpdx * (z * z - h * z);
+
+            sum_ux += ux;
+        }
+
+        avg_ux = sum_ux / Nx;
+        ux_profile[k] = avg_ux;
+    }
+
+
+    int i_center = Nx / 2;
+    double sum_uy;
+    double dpdy;
+    double uy;
+    double avg_uy;
+
+    for (int k = 0; k <= Nz; k++) {
+        sum_uy = 0.0;
+
+        for (int j = 0; j <= Ny - 1; j++) {
+            h = film_thickness[i_center][j];
+            dpdy = d_film_pressure[i_center][j][1]; // ∂p/∂y
+
+            if (h <= 0.0) continue;
+
+            z = (double)k / Nz * h;
+            uy = (1.0 / (2.0 * viscosity)) * dpdy * (z * z - h * z);
+
+            sum_uy += uy;
+        }
+
+        avg_uy = sum_uy / Ny;
+        uy_profile[k] = avg_uy;
     }
 }
 
