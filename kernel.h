@@ -96,11 +96,11 @@ inline void compute_feq_2(){
         for (int j = 0; j <= Ny - 1; j++){
             velocity_squared = u[i][j][0] * u[i][j][0] + u[i][j][1] * u[i][j][1];
             // feq[i][j][0] = film_thickness[i][j] - w[0] * film_thickness[i][j] * ((15.0 / 2.0) * gravity * film_thickness[i][j] - 1.5 * velocity_squared);
-            feq[i][j][0] = film_thickness[i][j] * (1.0 - (5.0 / 6.0) * gravity * film_thickness[i][j]
+            feq[i][j][0] = film_thickness[i][j] * (1.0 - (5.0 / 6.0) * modulated_gravity * film_thickness[i][j]
                     - (2.0 / 3.0) * velocity_squared);
             for (int k = 1; k <= 8; k++){
                 local_velocity = cx[k] * u[i][j][0] + cy[k] * u[i][j][1];
-                feq[i][j][k] = w[k] * film_thickness[i][j] * (1.5 * gravity * film_thickness[i][j] + 3.0 * local_velocity + 4.5 * local_velocity * local_velocity - 1.5 * velocity_squared);
+                feq[i][j][k] = w[k] * film_thickness[i][j] * (1.5 * modulated_gravity * film_thickness[i][j] + 3.0 * local_velocity + 4.5 * local_velocity * local_velocity - 1.5 * velocity_squared);
             }
         }
     }

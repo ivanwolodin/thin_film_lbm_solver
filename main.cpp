@@ -464,6 +464,103 @@ inline void simulate_bubble() {
     }
 }
 
+inline void simulate_bubble_vibro() {
+
+    tau = 0.923;
+    viscosity = (tau - 0.5) * sound_speed_squared;
+    radius_initial = 80.0;
+    delta = 1.0;
+    surface_tension = 0.00005;
+    gravity = 1.0 * pow(10, -6);
+    theta_initial = 30.0;
+    theta_initial_d = theta_initial * (M_PI / 180);
+    theta_current = theta_initial_d;
+    minimal_thickness = 0.05;
+
+    steps_number = 5000000;
+
+    double radius=radius_initial;
+    double x0 = Nx / 2.0;
+    double y0 = Ny / 2.0;
+
+    bubble_volume = ((M_PI * radius * radius * radius) / 3.0) *  (1.0 - cos(theta_initial_d)) * (1.0 - cos(theta_initial_d)) * (2.0 + cos(theta_initial_d));
+
+    Fx = 0;
+    Fy = 0;
+
+    // for (int i = 0; i < Nx; ++i) {
+    //     for (int j = 0; j < Ny; ++j) {
+    //         double dxx = i - x0;
+    //         double dyy = j - y0;
+    //         double r = std::sqrt(dxx * dxx + dyy * dyy);
+    //
+    //         if (r <= radius) {
+    //             // h(r) = (cos(asin(r / R)) - cos(theta)) * R
+    //             double val = (std::cos(std::asin(r / radius)) - std::cos(theta_initial_d)) * radius;
+    //             film_thickness[i][j] = (val > 0.0) ? val : minimal_thickness;
+    //         } else {
+    //             film_thickness[i][j] = minimal_thickness;
+    //         }
+    //     }
+    // }
+
+    for (size_t i = 0; i <= Nx - 1; i++) {
+        for (size_t j = 0; j <= Ny - 1; j++) {
+            film_thickness[i][j] = 0.05;
+        }
+    }
+
+    double height = 10.0;    // заданная высота
+    area = 400;              // площадь в ячейках (например 5x5)
+
+    size_t side = static_cast<size_t>(std::sqrt(area));
+    if (side * side < area) side++; // чтобы гарантировать площадь ≥ заданной
+
+    size_t cxx = Nx / 2;
+    size_t cyy = Ny / 2;
+
+    size_t half = side / 2;
+
+    for (size_t i = cxx - half; i <= cxx + half && i < Nx; i++) {
+        for (size_t j = cyy - half; j <= cyy + half && j < Ny; j++) {
+            film_thickness[i][j] = height;
+        }
+    }
+
+    modulated_gravity = gravity;
+    output_fields(0);
+    compute_feq_2();
+    for (int i = 0; i <= Nx - 1; i++){
+        for (int j = 0; j <= Ny - 1; j++){
+            for (int k = 0; k < Nc; k++){
+                f[i][j][k] = feq[i][j][k];
+            }
+
+        }
+    }
+
+    amplitude = 0*30;//14.14213;
+    omega     = 0.05;
+
+    dump_initial_params();
+    // compute_all_forces();
+
+    for (int step = 1; step <= steps_number; step++) {
+        std::cout<<"============================"<<std::endl;
+        std::cout << "step = " << step << std::endl;
+
+        // double t = step * delta_t;
+        modulated_gravity = gravity *  (1.0 + amplitude * amplitude * omega * sin(omega * step));
+
+        take_step();
+        output_fields(step);
+        output_max_height(step);
+        output_min_height(step);
+        output_total_mass(step);
+        output_dh(step);
+        output_energy(step);
+    }
+}
 
 
 void simulate_square_drop() {
@@ -609,7 +706,7 @@ int main() {
     // simulate_random_interface();
     // simulate_square_drop();
 
-    simulate_bubble();
-
+    // simulate_bubble();
+    simulate_bubble_vibro();
     return 0;
 }

@@ -17,9 +17,9 @@ h_max_100_full = h_max_100  # тут и так полная сетка
 # строим графики
 plt.figure(figsize=(10, 6))
 
-plt.plot(h_max_10_full["step"], h_max_10_full["value"], label=r"$h_{S=10}$", linewidth=4.5)
-plt.plot(h_max_50_full["step"], h_max_50_full["value"], label=r"$h_{S=50}$", linewidth=4.5)
-plt.plot(h_max_100_full["step"], h_max_100_full["value"], label=r"$h_{S=100}$", linewidth=4.5)
+plt.plot(h_max_10_full["step"], h_max_10_full["value"], label=r"$h_{S=100}$", linewidth=4.5)
+plt.plot(h_max_50_full["step"], h_max_50_full["value"], label=r"$h_{S=2500}$", linewidth=4.5)
+plt.plot(h_max_100_full["step"], h_max_100_full["value"], label=r"$h_{S=10000}$", linewidth=4.5)
 
 plt.xlabel("Шаг времени")
 plt.ylabel("Значение")

@@ -42,6 +42,9 @@ inline void dump_initial_params() {
     filestr<<"theta_eq= "<< theta_equilibrium << std::endl;
     filestr<<"theta_eq_d= "<< theta_equilibrium_d << std::endl;
 
+    filestr<<"amplitude= "<< amplitude << std::endl;
+    filestr<<"omega= "<< omega << std::endl;
+    filestr<<"area= "<< area << std::endl;
     filestr<<std::endl<<std::endl;
     filestr<<"delta= "<< delta << std::endl;
     filestr<<std::endl<<std::endl;

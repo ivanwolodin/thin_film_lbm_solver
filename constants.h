@@ -11,8 +11,8 @@
 
 using std::vector;
 
-constexpr int Nx = 200;
-constexpr int Ny = 200;
+constexpr int Nx = 100;
+constexpr int Ny = 100;
 constexpr int Nc = 9;
 
 constexpr int Nz = 20;

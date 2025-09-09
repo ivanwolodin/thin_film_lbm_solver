@@ -44,9 +44,14 @@ inline double thickness_integral = 0.0;
 inline double Fx = -1000;
 inline double Fy = -1000;
 
+inline double modulated_gravity = 10000;
 
 // Lennard-Johnson
 constexpr int n = 9;
 constexpr int m = 3;
 
+
+inline double amplitude = 11110.01;
+inline double omega     = 1111110.05;
+inline size_t area;
 #endif //THIN_FILM_LBM_CONTROLLING_PARAMS_H
