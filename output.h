@@ -9,6 +9,9 @@
 #include "constants.h"
 #include "controlling_params.h"
 
+using std::cout;
+using std::endl;
+
 inline void greetings() {
     std::cout<<"================================================="<<std::endl;
     std::cout<<"================================================="<<std::endl;
@@ -36,8 +39,8 @@ inline void dump_initial_params() {
 
     filestr<<"surface_tension= "<< surface_tension << std::endl;
 
-    filestr<<"theta_initial= "<< theta_initial << std::endl;
-    filestr<<"theta_initial_d= "<< theta_initial_d << std::endl;
+    filestr<<"theta= "<< theta << std::endl;
+    filestr<<"theta_d= "<< theta_d << std::endl;
 
     filestr<<"theta_eq= "<< theta_equilibrium << std::endl;
     filestr<<"theta_eq_d= "<< theta_equilibrium_d << std::endl;
@@ -68,6 +71,14 @@ inline void output_field(int step_time, const std::string& which_field)
         for (int k = 0; k < Nz; k++) {
             filestr << k << " " << ux_profile[k] << std::endl;
         }
+    }
+
+    if (which_field == "thickness_profile")
+    {
+        for (int y = 0; y <= Ny - 1; y++) {
+            filestr <<  y << " " << film_thickness[Nx / 2][y] << std::endl;
+        }
+
     }
 
     if (which_field == "uy_profile")
@@ -163,11 +174,11 @@ inline void output_fields(int step_time)
     {
         output_field(step_time, "u");
         output_field(step_time, "v");
+        output_field(step_time, "thickness");
+        // output_field(step_time, "ux_profile");
+        // output_field(step_time, "uy_profile");
 
-        output_field(step_time, "ux_profile");
-        output_field(step_time, "uy_profile");
 
-        output_field(step_time, "film_thickness");
         // output_field(step_time, "d_film_pressure");
         // output_field(step_time, "film_pressure");
         // output_field(step_time, "f_film_x");
@@ -234,6 +245,7 @@ inline void output_energy(int step_time) {
 }
 
 
+
 inline void output_total_mass(int step_time) {
     std::ofstream height_f;
     std::string fileheight = "mass.txt";
@@ -242,21 +254,14 @@ inline void output_total_mass(int step_time) {
     height_f << step_time << "  " << thickness_integral << endl;
 }
 
-inline void output_radius_and_h_and_theta(int step_time)
+inline void output_spreading_radius(int step_time)
 {
-    std::ofstream theta_f;
-    std::string fileNameVelInt = "theta.txt";
-
-    theta_f.open(fileNameVelInt, std::ios::app);
-    theta_f << step_time << "  " << theta_current << endl;
-
     std::ofstream radius_f;
     std::string fileNameMeanRho = "radius.txt";
 
     radius_f.open(fileNameMeanRho, std::ios::app);
     radius_f << step_time << "  " << spreading_radius << endl;
 
-    output_max_height(step_time);
 }
 
 inline void compute_thickness_integral(){

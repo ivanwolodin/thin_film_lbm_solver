@@ -2,9 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # читаем три файла
-h_max_50 = pd.read_csv("spreading_square_droplet/r_50/h_max.txt", delim_whitespace=True, header=None, names=["step", "value"])
-h_max_100 = pd.read_csv("spreading_square_droplet/r_100/h_max.txt", delim_whitespace=True, header=None, names=["step", "value"])
-h_max_10 = pd.read_csv("spreading_square_droplet/r_10/h_max.txt", delim_whitespace=True, header=None, names=["step", "value"])
+h_max_50 = pd.read_csv("../spreading_square_droplet/r_50/h_max.txt", delim_whitespace=True, header=None, names=["step", "value"])
+h_max_100 = pd.read_csv("../spreading_square_droplet/r_100/h_max.txt", delim_whitespace=True, header=None, names=["step", "value"])
+h_max_10 = pd.read_csv("../spreading_square_droplet/r_10/h_max.txt", delim_whitespace=True, header=None, names=["step", "value"])
 
 # общая временная сетка по самому длинному (h_max_50)
 steps = h_max_100["step"]

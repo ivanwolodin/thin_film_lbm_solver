@@ -89,54 +89,12 @@ inline void compute_height_and_radius() {
     center_x = ic;
     center_y = jc;
 
-    // --- 2. Минимальная толщина (подложка)
-    // double thickness_min = thickness_max;
-    // for (int i = 0; i < Nx; i++) {
-    //     for (int j = 0; j < Ny; j++) {
-    //         if (film_thickness[i][j] < thickness_min) {
-    //             thickness_min = film_thickness[i][j];
-    //         }
-    //     }
-    // }
-    //
     int r_left = 0, r_right = 0, r_up = 0, r_down = 0;
-    //
-    // // вправо
-    // for (int i = center_x; i < Nx - 1; i++) {
-    //     if (film_thickness[i][jc] <= thickness_min) {
-    //         r_right = i - center_x;
-    //         break;
-    //     }
-    // }
-    //
-    // // влево
-    // for (int i = center_x; i >= 0; i--) {
-    //     if (film_thickness[i][jc] <= thickness_min) {
-    //         r_left = center_x - i;
-    //         break;
-    //     }
-    // }
-    //
-    // // вниз (ось Y+)
-    // for (int j = center_y; j < Ny - 1; j++) {
-    //     if (film_thickness[center_x][j] <= thickness_min) {
-    //         r_down = j - center_y;
-    //         break;
-    //     }
-    // }
-    //
-    // // вверх (ось Y-)
-    // for (int j = center_y; j >= 0; j--) {
-    //     if (film_thickness[center_x][j] <= thickness_min) {
-    //         r_up = center_y - j;
-    //         break;
-    //     }
-    // }
-
-
+    const double eps = 1e-6;  // допуск для сравнения толщин
+    minimal_thickness = 0.05;
     // вправо
     for (int i = center_x; i < Nx - 1; i++) {
-        if (film_thickness[i][center_y] == minimal_thickness) {
+        if (fabs(film_thickness[i][center_y] - minimal_thickness) < eps) {
             r_right = i - center_x;
             break;
         }
@@ -144,7 +102,7 @@ inline void compute_height_and_radius() {
 
     // влево
     for (int i = center_x; i >= 0; i--) {
-        if (film_thickness[i][center_y] == minimal_thickness) {
+        if (fabs(film_thickness[i][center_y] - minimal_thickness) < eps) {
             r_left = center_x - i;
             break;
         }
@@ -152,7 +110,7 @@ inline void compute_height_and_radius() {
 
     // вверх
     for (int j = center_y; j < Ny - 1; j++) {
-        if (film_thickness[center_x][j] == minimal_thickness) {
+        if (fabs(film_thickness[center_x][j] - minimal_thickness) < eps) {
             r_down = j - center_y;
             break;
         }
@@ -160,17 +118,18 @@ inline void compute_height_and_radius() {
 
     // вниз
     for (int j = center_y; j >= 0; j--) {
-        if (film_thickness[center_x][j] == minimal_thickness) {
+        if (fabs(film_thickness[center_x][j] - minimal_thickness) < eps) {
             r_up = center_y - j;
             break;
         }
     }
 
-    spreading_radius = std::max({r_left, r_right, r_up, r_down});
-    std::cout<<"spreading: " << spreading_radius<<std::endl;
-    std::cout<<"thickness_max: " << thickness_max<<" at ("<<center_x<< ", " <<center_y <<")"<<std::endl;
-    // std::cout<<"thickness_min: " << thickness_min<<std::endl;
+    // усреднённый радиус
+    spreading_radius = (r_left + r_right + r_up + r_down) / 4.0;
 
+    std::cout << "spreading radius (avg): " << spreading_radius << std::endl;
+    std::cout << "thickness_max: " << thickness_max
+              << " at (" << center_x << ", " << center_y << ")" << std::endl;
 }
 
 inline void compute_theta() {
@@ -220,8 +179,100 @@ inline void compute_theta() {
     if (x < -1.0) x = -1.0;
     if (x > 1.0) x = 1.0;
 
-    theta_current = std::acos(x);
-    std::cout<<"theta_current: " <<theta_current<< std::endl <<std::endl;
+    theta = std::acos(x);
+    std::cout<<"theta_current: " <<theta<< std::endl <<std::endl;
 }
+
+double cubic_interp(double x[4], double y[4], double x0) {
+    double result = 0.0;
+    for (int i = 0; i < 4; i++) {
+        double term = y[i];
+        for (int j = 0; j < 4; j++) {
+            if (j != i)
+                term *= (x0 - x[j]) / (x[i] - x[j]);
+        }
+        result += term;
+    }
+    return result;
+}
+
+inline void compute_spreading_radius_v2() {
+    int Nbg = 5;
+    double background = 0.0;
+    for (int j = 0; j < Nbg; j++) {
+        background += film_thickness[Nx/2][j];
+    }
+    background /= Nbg;
+
+    double threshold = background * 2.0;
+    spreading_radius = -1.0;
+
+    // Ищем индекс перехода
+    int idx = -1;
+    for (int j = 1; j < Ny-2; j++) {
+        if (film_thickness[Nx/2][j-1] < threshold && film_thickness[Nx/2][j] >= threshold) {
+            idx = j;
+            break;
+        }
+    }
+
+    if (idx != -1) {
+        // Берем 4 точки вокруг порога для кубической интерполяции
+        double x[4] = { (double)(idx-2), (double)(idx-1), (double)(idx), (double)(idx+1) };
+        double y[4] = { film_thickness[Nx/2][idx-2], film_thickness[Nx/2][idx-1],
+                        film_thickness[Nx/2][idx], film_thickness[Nx/2][idx+1] };
+
+        // Решаем уравнение v(y) = threshold методом Ньютона/брутфорс (здесь простой поиск)
+        double step = 0.001;
+        double j_interp = idx-1;  // стартовая точка
+        for (double jj = idx-1; jj <= idx; jj += step) {
+            if (cubic_interp(x, y, jj) >= threshold) {
+                j_interp = jj;
+                break;
+            }
+        }
+
+        spreading_radius = (Ny/2)*dy - j_interp*dy;  // радиус в физических единицах
+        if (spreading_radius >= 0.0)
+            std::cout << "Spreading radius = " << spreading_radius << std::endl;
+        else
+            std::cout << "Not found\n";
+    } else {
+        std::cout << "Not found\n";
+    }
+}
+
+
+
+inline void compute_spreading_radius() {
+    int Nbg = 5;
+    double background = 0.0;
+    for (int j = 0; j < Nbg; j++) {
+        background += film_thickness[Nx/2][j];
+    }
+    background /= Nbg;
+
+    double threshold = background * 2.0;
+
+    spreading_radius = -1.0;
+
+    for (int j = 1; j < Ny/2; j++) {
+        double v1 = film_thickness[Nx/2][j-1];
+        double v2 = film_thickness[Nx/2][j];
+
+        if (v1 < threshold && v2 >= threshold) {
+            // линейная интерполяция
+            double t = (threshold - v1) / (v2 - v1);
+            spreading_radius = (j - 1) + t;
+            break;
+        }
+    }
+    spreading_radius = (Ny/2) - spreading_radius;
+    if (spreading_radius >= 0.0)
+        std::cout << "Spreading radius = " << spreading_radius << std::endl;
+    else
+        std::cout << "Not found\n";
+}
+
 
 #endif //THIN_FILM_LBM_THETA_CALCULATION_H

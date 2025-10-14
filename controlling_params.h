@@ -15,9 +15,6 @@ inline double gravity = 1.0 * pow(10, -5);
 
 inline double radius_initial = 80.0;
 
-inline double theta_initial = 30.0;
-inline double theta_initial_d = theta_initial * (M_PI / 180);
-
 inline double theta_equilibrium = 15.0;
 inline double theta_equilibrium_d = theta_equilibrium * (M_PI / 180);
 
@@ -31,7 +28,8 @@ inline double minimal_thickness = 0.07;
 inline int center_x = 0;
 inline int center_y = 0;
 
-inline double theta_current = theta_initial_d;
+inline double theta = -900;
+inline double theta_d = theta * (M_PI / 180);
 
 inline double spreading_radius;
 

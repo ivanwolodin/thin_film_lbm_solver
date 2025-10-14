@@ -42,9 +42,9 @@ inline void compute_film_fric(){
 }
 
 inline void compute_pii(){
-    theta_current = theta_initial_d;
+    // theta_current = theta_initial_d;
     // compute_theta();
-    double pii_theta = (1.0 - cos(theta_current)) * (((n - 1.0) * (m - 1.0)) / (n - m));
+    double pii_theta = (1.0 - cos(theta_d)) * (((n - 1.0) * (m - 1.0)) / (n - m));
     // cout << "pii_theta = " << pii_theta << endl;
     for (int i = 0; i <= Nx - 1; i++){
         for (int j = 0; j <= Ny - 1; j++){
@@ -67,7 +67,7 @@ inline void compute_pii(){
 }
 
 inline void compute_pii_2() {
-    double coeff = (1.0 - cos(theta_current)) * ((n - 1.0) * (m - 1.0)) / ((n - m) * minimal_thickness);
+    double coeff = (1.0 - cos(theta_d)) * ((n - 1.0) * (m - 1.0)) / ((n - m) * minimal_thickness);
     double hcrit = 0.007;
     for (int i = 0; i < Nx; i++) {
         for (int j = 0; j < Ny; j++) {

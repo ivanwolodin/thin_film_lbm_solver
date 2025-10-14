@@ -169,7 +169,9 @@ inline void take_step() {
     compute_all_forces();
     healthy_check();
 
-    compute_avg_velocity();
+    // compute_height_and_radius();
+
+    // compute_avg_velocity();
 }
 
 #endif //THIN_FILM_LBM_KERNEL_H
